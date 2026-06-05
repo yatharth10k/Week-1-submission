@@ -30,6 +30,7 @@ def run_chatbot():
 
     print("Chat started. Type 'exit' to quit.\n")
     response=None
+    number_chats=0
     while True:
         # TODO: take user input
         # TODO: append the user turn to messages
@@ -44,13 +45,26 @@ def run_chatbot():
         elif user_input=="/reset":
             messages=[{"role":"system","content":"You are a helpful assistant."}]
             response=None
+            number_chats=0
             print("History has been cleared")
         elif user_input=="/tokens":
             if response:
                 print(response.usage)
             else:
                 print("No API calls yet!!")
+        elif user_input=="/number_chats":
+            print("Number of chats: ", number_chats)
+        elif user_input=="/history":
+            if len(messages)<2:
+                print("No history yet!!")
+            else:
+                num=0;
+                for i in messages:
+                    if i["role"]=="user":
+                        num+=1
+                        print(num, ")", i["content"])
         else:            
+            number_chats=number_chats+1
             messages.append({"role" : "user", "content" : user_input})
             response=client.chat.completions.create(
             model="openai/gpt-4o-mini",
